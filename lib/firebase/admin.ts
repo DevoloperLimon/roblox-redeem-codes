@@ -3,6 +3,9 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
 if (!getApps().length) {
+  if (!process.env.FIREBASE_PRIVATE_KEY) {
+    console.error('⚠️ FIREBASE_PRIVATE_KEY is not set! Admin SDK will fail.');
+  }
   try {
     initializeApp({
       credential: cert({

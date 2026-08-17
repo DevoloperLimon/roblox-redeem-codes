@@ -23,9 +23,18 @@ export async function POST(request: Request) {
     });
 
     return response;
-  } catch (error) {
-    console.error('Error creating session cookie', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : 'Unknown error';
+    const errCode = (error as { code?: string })?.code ?? 'N/A';
+    console.error('❌ Session cookie creation failed:', {
+      message: errMsg,
+      code: errCode,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    return NextResponse.json(
+      { error: 'Internal Server Error', details: errMsg, code: errCode },
+      { status: 500 }
+    );
   }
 }
 
