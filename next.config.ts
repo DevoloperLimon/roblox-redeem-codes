@@ -42,8 +42,10 @@ const nextConfig: NextConfig = {
     ],
   },
   serverExternalPackages: ["firebase-admin"],
-  serverActions: {
-    allowedOrigins: ["192.168.0.100", "localhost:3000", "192.168.0.100:3000"],
+  experimental: {
+    serverActions: {
+      allowedOrigins: ["192.168.0.100", "localhost:3000", "192.168.0.100:3000"],
+    },
   },
 };
 
