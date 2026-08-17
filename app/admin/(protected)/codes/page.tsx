@@ -44,8 +44,8 @@ export default function AdminCodesPage() {
           }
           
           return {
-            id: docSnap.id,
             ...codeData,
+            id: docSnap.id,
             gameTitle,
           };
         }));
