@@ -9,16 +9,12 @@ if (!getApps().length) {
 
   let privateKey = process.env.FIREBASE_PRIVATE_KEY || '';
 
-  if (privateKey.startsWith('ey') || !privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
-    // Try decoding Base64 if it's encoded
-    try {
-      privateKey = Buffer.from(privateKey, 'base64').toString('utf8');
-    } catch (e) {
-      console.error('Base64 decode failed', e);
-    }
+  // Strip surrounding quotes if present
+  if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+    privateKey = privateKey.slice(1, -1);
   }
 
-  // Fallback for standard escaped newlines
+  // Convert escaped newlines to actual newlines
   privateKey = privateKey.replace(/\\n/g, '\n');
 
   try {
