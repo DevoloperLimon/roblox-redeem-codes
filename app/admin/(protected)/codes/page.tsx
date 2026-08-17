@@ -22,7 +22,7 @@ export default function AdminCodesPage() {
     const fetchCodes = async () => {
       try {
         const snapshot = await getDocs(collection(db, "codes"));
-        
+
         if (snapshot.empty) {
           setCodes([]);
           return;
@@ -31,7 +31,7 @@ export default function AdminCodesPage() {
         const fetchedCodes = await Promise.all(snapshot.docs.map(async (docSnap) => {
           const codeData = docSnap.data() as Code;
           let gameTitle = "Unknown Game";
-          
+
           if (codeData.gameId) {
             try {
               const gameDoc = await getDoc(doc(db, "games", codeData.gameId));
@@ -42,17 +42,17 @@ export default function AdminCodesPage() {
               console.error("Error fetching game title:", e);
             }
           }
-          
+
           return {
             ...codeData,
             id: docSnap.id,
             gameTitle,
           };
         }));
-        
+
         // Sort in memory (newest first) to avoid requiring composite indexes
         fetchedCodes.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-        
+
         setCodes(fetchedCodes);
       } catch (error) {
         console.error("Error fetching codes:", error);
@@ -67,7 +67,7 @@ export default function AdminCodesPage() {
 
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this code? This action cannot be undone.")) return;
-    
+
     try {
       await deleteDoc(doc(db, "codes", id));
       setCodes(codes.filter((code) => code.id !== id));
